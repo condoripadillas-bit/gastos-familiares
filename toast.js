@@ -1,7 +1,3 @@
-// =========================================================
-// toast.js - Notificaciones discretas (reemplaza los alert())
-// =========================================================
-
 function mostrarToast(mensaje, tipo = "exito") {
   const toast = document.createElement("div");
   toast.className = `toast toast--${tipo}`;
