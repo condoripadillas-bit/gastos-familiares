@@ -9,7 +9,8 @@
 
 <body>
 
-  <!-- HEADER -->
+  <!-- ================= HEADER ================= -->
+
   <header class="header">
 
     <div class="header__left">
@@ -17,6 +18,7 @@
     </div>
 
     <!-- BOTÓN MODO CLARO / OSCURO -->
+
     <button
       class="theme-button"
       id="themeButton"
@@ -26,10 +28,12 @@
     </button>
 
     <!-- MENÚ HAMBURGUESA -->
+
     <button
       class="hamburger"
       id="hamburgerBtn"
-      aria-label="Abrir menú">
+      aria-label="Abrir menú"
+      type="button">
 
       <span></span>
       <span></span>
@@ -38,6 +42,7 @@
     </button>
 
     <!-- MENÚ -->
+
     <nav class="nav" id="navMenu">
 
       <a href="#dashboard" class="nav__link">
@@ -52,6 +57,12 @@
         Mis gastos
       </a>
 
+      <!-- CERRAR SESIÓN -->
+
+     <button type="button" id="btnSalir" class="nav__link nav__salir">
+  Salir
+</button>
+
     </nav>
 
   </header>
@@ -61,7 +72,7 @@
 
   <main class="main">
 
-    <!-- SECCIÓN FOTO FAMILIAR -->
+    <!-- ================= FOTO FAMILIAR ================= -->
 
     <section class="familia-card">
 
@@ -114,7 +125,7 @@
 
       <div class="stats-grid">
 
-        <!-- TOTAL -->
+        <!-- TOTAL GASTADO -->
 
         <div class="stat-card">
 
@@ -133,7 +144,7 @@
         </div>
 
 
-        <!-- MES -->
+        <!-- GASTOS DEL MES -->
 
         <div class="stat-card">
 
@@ -152,7 +163,7 @@
         </div>
 
 
-        <!-- REGISTROS -->
+        <!-- NÚMERO DE REGISTROS -->
 
         <div class="stat-card">
 
@@ -171,7 +182,7 @@
         </div>
 
 
-        <!-- CATEGORÍA -->
+        <!-- CATEGORÍA TOP -->
 
         <div class="stat-card">
 
@@ -432,26 +443,33 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <script src="js/supabaseClient.js"></script>
-   <script src="js/toast.js"></script>
+
+  <script src="js/toast.js"></script>
+
   <script src="js/app.js"></script>
 
+  <script src="js/auth.js"></script>
 
-  <!-- MODO CLARO / OSCURO -->
+
+  <!-- ================= MODO CLARO / OSCURO ================= -->
 
   <script>
 
     const themeButton =
       document.getElementById("themeButton");
 
-    if (themeButton) {
 
-      themeButton.addEventListener("click", function () {
+    function aplicarTema() {
 
-        document.body.classList.toggle("dark-mode");
+      const temaGuardado =
+        localStorage.getItem("tema") || "claro";
 
-        if (
-          document.body.classList.contains("dark-mode")
-        ) {
+
+      if (temaGuardado === "oscuro") {
+
+        document.body.classList.add("dark-mode");
+
+        if (themeButton) {
 
           themeButton.textContent = "☀️";
 
@@ -460,7 +478,13 @@
             "Cambiar a modo claro"
           );
 
-        } else {
+        }
+
+      } else {
+
+        document.body.classList.remove("dark-mode");
+
+        if (themeButton) {
 
           themeButton.textContent = "🌙";
 
@@ -471,7 +495,74 @@
 
         }
 
-      });
+      }
+
+    }
+
+
+    /* Aplicar el tema guardado al abrir la página */
+
+    aplicarTema();
+
+
+    /* Cambiar tema */
+
+    if (themeButton) {
+
+      themeButton.addEventListener(
+        "click",
+        function () {
+
+          const estaOscuro =
+            document.body.classList.contains("dark-mode");
+
+
+          if (estaOscuro) {
+
+            localStorage.setItem(
+              "tema",
+              "claro"
+            );
+
+          } else {
+
+            localStorage.setItem(
+              "tema",
+              "oscuro"
+            );
+
+          }
+
+
+          aplicarTema();
+
+        }
+      );
+
+    }
+
+
+    /* ================= CERRAR SESIÓN ================= */
+
+    const btnCerrarSesion =
+      document.getElementById("btnCerrarSesion");
+
+
+    if (btnCerrarSesion) {
+
+      btnCerrarSesion.addEventListener(
+        "click",
+        async function () {
+
+          const confirmar =
+            confirm("¿Quieres cerrar sesión?");
+
+          if (!confirmar) return;
+
+          await cerrarSesion();
+
+        }
+      );
 
     }
 
